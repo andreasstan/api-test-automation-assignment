@@ -90,7 +90,6 @@ test("Should return 405 Method Not Allowed for POST request on GET route", async
 // Test Case 5: Unprocessable Entity (Expected 422)
 test("Should return 422 when the server is unable to process the content", async () => {
     try {
-        // Sending incomplete or invalid data (missing required fields)
         const response = await request(baseURL)
             .post("/brands")
             .set("Accept", "application/json")
@@ -107,14 +106,13 @@ test("Should return 422 when the server is unable to process the content", async
 // Test Case 6: Invalid Data for Creating Brand (Expected 422)
 test("Should return 422 for invalid data when creating a brand", async () => {
     try {
-        // Sending invalid data (non-string type for 'name' or 'slug')
         const response = await request(baseURL)
             .post("/brands")
             .set("Accept", "application/json")
             .set("Content-Type", "application/json")
             .send({
-                name: 12345, // Tipe 'name' yang tidak valid (angka bukannya string)
-                slug: 'invalid-slug', // slug tetap valid
+                name: 12345,
+                slug: 'invalid-slug',
             });
 
         expect(response.statusCode).toBe(422);
@@ -128,7 +126,7 @@ test("Should return 422 for invalid data when creating a brand", async () => {
 // Test Case 7: Creating a Brand with Maximum Length Name (Expected 422)
 test("should return 422 when creating a brand with a maximum length name", async () => {
     try {
-        const longName = 'a'.repeat(121); // Misalnya, panjang nama yang dibatasi hingga 120 karakter
+        const longName = 'a'.repeat(121);
         const response = await request(baseURL)
             .post('/brands')
             .set('accept', 'application/json')
@@ -154,8 +152,8 @@ test("should return 422 when creating a brand with empty name and slug", async (
             .set('accept', 'application/json')
             .set('Content-Type', 'application/json')
             .send({
-                name: '', // Nama kosong
-                slug: '', // Slug kosong
+                name: '', 
+                slug: '', 
             });
 
         expect(response.statusCode).toBe(422);
@@ -176,7 +174,7 @@ test("should return 422 when creating a brand with empty name and slug", async (
 // Test Case 9: Creating a Brand with Non-ASCII Characters in Name (Expected 201)
 test("should return 201 when creating a brand with non-ASCII characters in the name", async () => {
     try {
-        const nonAsciiName = 'CaféBrand💥'; // Nama dengan karakter non-ASCII
+        const nonAsciiName = 'CaféBrand💥'; 
         const response = await request(baseURL)
             .post('/brands')
             .set('accept', 'application/json')
@@ -198,7 +196,7 @@ test("should return 201 when creating a brand with non-ASCII characters in the n
 // Test Case 10: Creating a Brand with Special Characters in Name (Expected 201)
 test("should return 201 when creating a brand with special characters in name", async () => {
     try {
-        const specialName = 'New!Brand@2025#'; // Nama dengan simbol spesial
+        const specialName = 'New!Brand@2025#';
         const response = await request(baseURL)
             .post('/brands')
             .set('accept', 'application/json')
@@ -220,7 +218,7 @@ test("should return 201 when creating a brand with special characters in name", 
 // Test Case 11: Duplicate Slug Handling (Expected 422)
 test("should return 422 when creating a brand with a duplicate slug", async () => {
     try {
-        // Pertama, buat brand dengan slug yang sama
+        // Buat brand dengan slug yang sama
         const slug = faker.lorem.slug();
         await request(baseURL)
             .post('/brands')
@@ -238,7 +236,7 @@ test("should return 422 when creating a brand with a duplicate slug", async () =
             .set('Content-Type', 'application/json')
             .send({
                 name: 'Brand Two',
-                slug: slug, // Slug duplikat
+                slug: slug,
             });
 
         expect(response.statusCode).toBe(422);

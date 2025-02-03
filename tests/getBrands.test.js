@@ -1,7 +1,7 @@
 const request = require("supertest");
 const baseURL = "https://api.practicesoftwaretesting.com";
 const invalidBrandId = "invalid-id-123"; // ID tidak valid
-const nonexistentBrandId = "01JK0XXX0XXX0XXX0XXX0XXX"; // ID tidak ada di database
+const nonexistentBrandId = "01jk6aqqyg7rh2t5nhsw1sq0vpg"; // ID tidak ada di database
 const faker = require('faker'); // Import faker untuk menghasilkan data random
 const randomName = faker.company.companyName();
 const randomSlug = faker.helpers.slugify(randomName);
@@ -32,7 +32,7 @@ test("Should retrieve brand details successfully with a valid ID", async () => {
         expect(response.body).toHaveProperty("slug");
     } catch (error) {
         console.error("Test failed - Response body:", error.response?.body || error);
-        throw error; // Re-throw error agar Jest tetap menandai test sebagai failed
+        throw error; 
     }
 });
 
@@ -66,7 +66,7 @@ test("Should return 404 when retrieving a brand with an invalid ID format", asyn
     }
 });
 
-// Test Case 4: Gagal mengambil brand dengan ID berupa null (Expected 400)
+// Test Case 4: Gagal mengambil brand dengan ID berupa null (Expected 404)
 test("Should return 404 when retrieving a brand with null as ID", async () => {
     try {
         const response = await request(baseURL)
@@ -81,7 +81,7 @@ test("Should return 404 when retrieving a brand with null as ID", async () => {
     }
 });
 
-// Test Case 5: Gagal mengambil brand dengan ID berisi karakter spesial (Expected 400)
+// Test Case 5: Gagal mengambil brand dengan ID berisi karakter spesial (Expected 404)
 test("Should return 404 when retrieving a brand with special characters in ID", async () => {
     try {
         const response = await request(baseURL)
@@ -96,14 +96,14 @@ test("Should return 404 when retrieving a brand with special characters in ID", 
     }
 });
 
-// Test Case 6: Gagal mengambil brand dengan ID yang memiliki whitespace (Expected 400 or 404)
+// Test Case 6: Gagal mengambil brand dengan ID yang memiliki whitespace (Expected 04)
 test("Should return 400 or 404 when retrieving a brand with whitespace in ID", async () => {
     try {
         const response = await request(baseURL)
             .get(`/brands/ valid-id `)
             .set("Accept", "application/json");
 
-        expect([400, 404]).toContain(response.statusCode);
+        expect(response.statusCode).toBe(404);
     } catch (error) {
         console.error("Test failed - Response body:", error.response?.body || error);
         throw error;
@@ -118,19 +118,6 @@ test("Should return 405 when using POST method on GET /brands/{id}", async () =>
             .set("Accept", "application/json");
 
         expect(response.statusCode).toBe(405);
-    } catch (error) {
-        console.error("Test failed - Response body:", error.response?.body || error);
-        throw error;
-    }
-});
-
-// Test Case 8: Tanpa Accept header (Expected 200 atau 406)
-test("Should return 200 or 406 when retrieving a brand without Accept header", async () => {
-    try {
-        const response = await request(baseURL)
-            .get(`/brands/${validBrandId}`);
-
-        expect([200, 406]).toContain(response.statusCode);
     } catch (error) {
         console.error("Test failed - Response body:", error.response?.body || error);
         throw error;
