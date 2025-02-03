@@ -1,4 +1,4 @@
-# Test Automation for Test Ass
+# Test Automation for Test Assignment
 
 ## Setup and Running Tests
 
