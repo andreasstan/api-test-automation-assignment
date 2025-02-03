@@ -30,7 +30,6 @@ Before you begin, ensure you have the following installed:
 - Test data is dynamically generated, and newly created brands can be retrieved or updated.
 - Some tests rely on the order of execution (e.g., creating a brand before updating it).
 - The system should return `422` for invalid payloads and `404` for non-existent resources.
-- Responses are expected in JSON format.
 - Using supertest and jest: supertest is used to perform HTTP requests compared to other libraries because it does not require extra configuration, can directly check statusCode, body and jest is used for testing and assertion.
 
 ## Test Summary & Findings
